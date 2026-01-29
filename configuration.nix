@@ -88,6 +88,7 @@ in
 
     # -- Nix tools -------------------------------------------------------------
     nix-index
+    nix-ld
 
     # -- Networking ------------------------------------------------------------
     geoip # API for GeoIP/Geolocation databases
@@ -547,6 +548,11 @@ in
         name = "Dominic Grimaldi";
         email = "dev@grimoutlook.dev";
       };
+      
+      # TODO: Add this back
+      # commit = {
+      #   template = "/home/dom/.dotfiles/git/templates/default-commit-template.txt";
+      # };
 
       alias = {
         ### Human Git
