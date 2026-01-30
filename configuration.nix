@@ -1,3 +1,4 @@
+
 # Edit this configuration file to define what should be installed on
 # your system. Help is available in the configuration.nix(5) man page, on
 # https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
@@ -28,6 +29,7 @@ in
     cacert
 
     # -- General tools ---------------------------------------------------------
+    bash
     bat # Cat(1) clone with syntax highlighting and Git integration
     btop # Monitor of resources
     choose # Human-friendly and fast alternative to cut and (sometimes) awk
@@ -123,11 +125,8 @@ in
   ];
 
   programs.bash = {
-    enable = true;
-    enableCompletion = true;
-    bashrcExtra = ''
-      export PATH="$PATH:$HOME/.local/bin"
-    '';
+    blesh.enable = true;
+    completion.enable = true;
   };
 
   programs.neovim = {
