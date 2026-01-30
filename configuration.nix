@@ -122,6 +122,14 @@ in
 
   ];
 
+  programs.bash = {
+    enable = true;
+    enableCompletion = true;
+    bashrcExtra = ''
+      export PATH="$PATH:$HOME/.local/bin"
+    '';
+  };
+
   programs.neovim = {
     enable = true;
     defaultEditor = true;
