@@ -14,10 +14,6 @@ let
   EZA_DEFAULT_OPTIONS="--header --long --time-style long-iso --git-repos --git --icons --octal-permissions --classify --hyperlink --group --mounts --extended";
 in
 {
-  security.pki.certificateFiles = [
-    ./certs/root-certs.pem
-  ];
-  
   # Enable the use of flakes
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
