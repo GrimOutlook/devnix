@@ -5,6 +5,7 @@
     ./eza.nix
     ./neovim.nix
     ./starship.nix
+    ./tmux.nix
   ];
 
   environment.systemPackages = with pkgs; [
@@ -40,6 +41,7 @@
     mosh # Mobile shell (ssh replacement)
     navi # Interactive cheatsheet tool for the command-line and application launchers
     neofetch # Fast, highly customizable system info script
+    openssl # Cryptographic library that implements the SSL and TLS protocols
     ouch # Command-line utility for easily compressing and decompressing files and directories
     pandoc # Conversion between documentation formats
     pastel # Command-line tool to generate, analyze, convert and manipulate colors
@@ -58,7 +60,6 @@
     skim # Command-line fuzzy finder written in Rust
     sysz # Fzf terminal UI for systemctl
     tealdeer # Very fast implementation of tldr in Rust
-    tmux # Terminal multiplexer
     watchexec # Executes commands in response to file modifications
     wikiman # Offline search engine for manual pages, Arch Wiki, Gentoo Wiki and other documentation
     xcp # Extended cp(1)

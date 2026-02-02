@@ -11,6 +11,7 @@
   imports = [
     # If you want to use modules your own flake exports (from modules/nixos):
     inputs.self.nixosModules.packages
+    inputs.self.nixosModules.certificates
     inputs.nixos-wsl.nixosModules.default
 
     # Or modules from other flakes (such as nixos-hardware):
@@ -71,6 +72,9 @@
   # FIXME: Add the rest of your current configuration
   wsl.enable = true;
   wsl.defaultUser = "grim";
+  # NOTE: Including the path slows down commands and bash-completion significantly
+  wsl.interop.includePath = false;
+  wsl.wslConf.interop.appendWindowsPath = false;
 
   # Set hostname
   networking.hostName = "nixos-wsl";
