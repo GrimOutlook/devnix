@@ -31,4 +31,6 @@
     # Additional contents of /etc/tmux.conf, to be run after sourcing plugins.
     extraConfig = builtins.readFile ./tmux.conf;
   };
+
+  environment.shellInit = builtins.readFile ./config.sh + builtins.readFile ./theme.sh;
 }
