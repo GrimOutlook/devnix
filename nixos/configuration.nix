@@ -11,12 +11,13 @@
   imports = [
     # If you want to use modules your own flake exports (from modules/nixos):
     inputs.self.nixosModules.packages
-    inputs.self.nixosModules.certificates
+    inputs.self.nixosModules.github_secrets
+
+    # Include the WSL module
     inputs.nixos-wsl.nixosModules.default
 
-    # Or modules from other flakes (such as nixos-hardware):
-    # inputs.hardware.nixosModules.common-cpu-amd
-    # inputs.hardware.nixosModules.common-ssd
+    # Include the agenix module for secrets management
+    inputs.agenix.nixosModules.default
 
     # You can also split up your configuration and import pieces of it here:
     # ./users.nix
@@ -61,6 +62,11 @@
       # Workaround for https://github.com/NixOS/nix/issues/9574
       nix-path = config.nix.nixPath;
     };
+    gc = {
+      automatic = true;
+      dates = "weekly";
+      options = "--delete-older-than 7d";
+    };
     # Opinionated: disable channels
     channel.enable = false;
 
@@ -76,8 +82,25 @@
   wsl.interop.includePath = false;
   wsl.wslConf.interop.appendWindowsPath = false;
 
+  # Set your time zone.
+  time.timeZone = "America/Chicago";
+
+  # Select internationalisation properties.
+  i18n.defaultLocale = "en_US.UTF-8";
+
   # Set hostname
   networking.hostName = "nixos-wsl";
+
+  age.secrets.github-key = {
+    file = ../secrets/github.com.age;
+    mode = "0600";
+    owner = "root";
+  };
+
+  services.githubSshConfig = {
+    enable = true;
+    identityFile = config.age.secrets.github-key.path;
+  };
 
   # TODO: Configure your system-wide user settings (groups, etc), add more users as needed.
   users.users = {
@@ -93,6 +116,19 @@
       ];
       # TODO: Be sure to add any other groups you need (such as networkmanager, audio, docker, etc)
       extraGroups = ["wheel"];
+    };
+  };
+
+  # This setups a SSH server. Very important if you're setting up a headless system.
+  # Feel free to remove if you don't need it.
+  services.openssh = {
+    enable = true;
+    settings = {
+      # Opinionated: forbid root login through SSH.
+      PermitRootLogin = "no";
+      # Opinionated: use keys only.
+      # Remove if you want to SSH using passwords
+      PasswordAuthentication = false;
     };
   };
 

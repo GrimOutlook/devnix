@@ -7,3 +7,6 @@ rm -rf /etc/nixos
 export NIX_CONFIG='experimental-features = nix-command flakes'
 nix run nixpkgs#git -- clone https://github.com/GrimOutlook/devnix /etc/nixos
 ```
+
+## Resources
+- [Wombat's Book of Nix](https://mhwombat.codeberg.page/nix-book/)

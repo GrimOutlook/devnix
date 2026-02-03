@@ -9,6 +9,7 @@
   ];
 
   environment.systemPackages = with pkgs; [
+    age # Modern encryption tool with small explicit keys
     bash # GNU Bourne-Again Shell, the de facto standard shell on Linux (for interactive use)
     bat # Cat(1) clone with syntax highlighting and Git integration
     bingrep # Greps through binaries from various OSs and architectures, and colors them
@@ -50,6 +51,7 @@
     procs # Modern replacement for ps written in Rust
     progress # Tool that shows the progress of coreutils programs
     rage # A simple, secure and modern file encryption tool (and Rust library) with small explicit keys, no config options, and UNIX-style composability.
+    ragenix # Age-encrypted secrets for NixOS, drop-in replacement for agenix
     rclone # Command line program to sync files and directories to and from major cloud storage
     rip2 # Safe and ergonomic alternative to rm
     ripgrep # Utility that combines the usability of The Silver Searcher with the raw speed of grep

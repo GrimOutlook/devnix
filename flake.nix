@@ -13,8 +13,13 @@
     home-manager.url = "github:nix-community/home-manager/release-25.11";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
+    # WSL
     nixos-wsl.url = "github:nix-community/NixOS-WSL/main";
     nixos-wsl.inputs.nixpkgs.follows = "nixpkgs";
+
+    # agenix
+    agenix.url = "github:ryantm/agenix";
+    agenix.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = {
@@ -22,6 +27,7 @@
     nixpkgs,
     home-manager,
     nixos-wsl,
+    agenix,
     ...
   } @ inputs: let
     # Supported systems for your flake packages, shell, etc.
