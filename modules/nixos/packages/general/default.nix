@@ -2,7 +2,7 @@
 
 {
   imports = [
-    ./eza.nix
+    ./eza/default.nix
     ./neovim.nix
     ./starship.nix
     ./tmux/default.nix
