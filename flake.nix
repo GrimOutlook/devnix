@@ -1,91 +1,119 @@
 {
-  description = "Your new nix config";
+  nixConfig = {
+    abort-on-warn = true;
+    extra-experimental-features = [ "pipe-operators" ];
+    allow-import-from-derivation = false;
+  };
 
   inputs = {
-    # Nixpkgs
+    flake-parts = {
+      url = "github:hercules-ci/flake-parts";
+      inputs.nixpkgs-lib.follows = "nixpkgs";
+    };
+
+    # Seamless integration of git hooks with Nix
+    git-hooks = {
+      url = "github:cachix/git-hooks.nix";
+      inputs = {
+        flake-compat.follows = "dedupe_flake-compat";
+        nixpkgs.follows = "nixpkgs";
+      };
+    };
+
+    import-tree.url = "github:vic/import-tree";
+
+    nix-index-database = {
+      url = "github:nix-community/nix-index-database";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+
     nixpkgs.url = "github:nixos/nixpkgs/nixos-25.11";
-    # You can access packages and modules from different nixpkgs revs
-    # at the same time. Here's an working example:
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
-    # Also see the 'unstable-packages' overlay at 'overlays/default.nix'.
 
-    # Home manager
-    home-manager.url = "github:nix-community/home-manager/release-25.11";
-    home-manager.inputs.nixpkgs.follows = "nixpkgs";
-
-    # WSL
-    nixos-wsl.url = "github:nix-community/NixOS-WSL/main";
-    nixos-wsl.inputs.nixpkgs.follows = "nixpkgs";
-
-    # agenix
-    agenix.url = "github:ryantm/agenix";
-    agenix.inputs.nixpkgs.follows = "nixpkgs";
-
-    # nixvim
-    nixvim.url = "github:nix-community/nixvim";
-  };
-
-  outputs = {
-    self,
-    nixpkgs,
-    home-manager,
-    nixos-wsl,
-    agenix,
-    nixvim,
-    ...
-  } @ inputs: let
-    # Supported systems for your flake packages, shell, etc.
-    systems = [
-      "aarch64-linux"
-      "i686-linux"
-      "x86_64-linux"
-      "aarch64-darwin"
-      "x86_64-darwin"
-    ];
-    # This is a function that generates an attribute by calling a function you
-    # pass to it, with each system as an argument
-    forAllSystems = nixpkgs.lib.genAttrs systems;
-  in {
-    # Your custom packages
-    # Accessible through 'nix build', 'nix shell', etc
-    packages = forAllSystems (system: import ./pkgs nixpkgs.legacyPackages.${system});
-    # Formatter for your nix files, available through 'nix fmt'
-    # Other options beside 'alejandra' include 'nixpkgs-fmt'
-    formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.alejandra);
-
-    # Your custom packages and modifications, exported as overlays
-    overlays = import ./overlays {inherit inputs;};
-    # Reusable nixos modules you might want to export
-    # These are usually stuff you would upstream into nixpkgs
-    nixosModules = import ./modules/nixos;
-    # Reusable home-manager modules you might want to export
-    # These are usually stuff you would upstream into home-manager
-    homeManagerModules = import ./modules/home-manager;
-
-    # NixOS configuration entrypoint
-    # Available through 'nixos-rebuild --flake .#your-hostname'
-    nixosConfigurations = {
-      nixos-wsl = nixpkgs.lib.nixosSystem {
-        specialArgs = {inherit inputs;};
-        modules = [
-          # > Our main nixos configuration file <
-          ./nixos/configuration.nix
-        ];
+    nixvim = {
+      url = "github:nix-community/nixvim";
+      inputs = {
+        flake-parts.follows = "flake-parts";
+        nixpkgs.follows = "nixpkgs";
       };
     };
 
-    # Standalone home-manager configuration entrypoint
-    # Available through 'home-manager --flake .#your-username@your-hostname'
-    homeConfigurations = {
-      "grim@nixos-wsl" = home-manager.lib.homeManagerConfiguration {
-        # Home-manager requires 'pkgs' instance
-        pkgs = nixpkgs.legacyPackages.x86_64-linux;
-        extraSpecialArgs = {inherit inputs;};
-        modules = [
-          # > Our main home-manager configuration file <
-          ./home-manager/home.nix
-        ];
-      };
+    # Jump to next/previous LSP reference in the current buffer for the item
+    # under the cursor with `]r`/`[r`.
+    refjump-nvim = {
+      flake = false;
+      url = "github:mawkler/refjump.nvim";
+    };
+
+    # Smart scroll is a plugin that enables you to control the scrolloff
+    # setting using percentages instead of static line numbers. This is a more
+    # intuitive way to handle scrolling, especially as you move between
+    # laptops, monitors, and resized windows and font sizes. Smart scrolloff
+    # will always keep your scrolling experience consistent.
+    smart-scrolloff-nvim = {
+      flake = false;
+      url = "github:tonymajestro/smart-scrolloff.nvim";
     };
   };
+
+  # _additional_ `inputs` only for deduplication
+  inputs = {
+    dedupe_flake-compat.url = "github:edolstra/flake-compat";
+  };
+
+  outputs =
+    inputs:
+    inputs.flake-parts.lib.mkFlake { inherit inputs; } {
+      text.readme.parts = {
+        disallow-warnings =
+          # markdown
+          ''
+            ## Trying to disallow warnings
+
+            This at the top level of the `flake.nix` file:
+
+            ```nix
+            nixConfig.abort-on-warn = true;
+            ```
+
+            > [!NOTE]
+            > It does not currently catch all warnings Nix can produce, but perhaps only evaluation warnings.
+          '';
+
+        flake-inputs-dedupe-prefix =
+          # markdown
+          ''
+            ## Flake inputs for deduplication are prefixed
+
+            Some explicit flake inputs exist solely for the purpose of deduplication.
+            They are the target of at least one `<input>.inputs.<input>.follows`.
+            But what if in the future all of those targeting `follows` are removed?
+            Ideally, Nix would detect that and warn.
+            Until that feature is available those inputs are prefixed with `dedupe_`
+            and placed in an additional separate `inputs` attribute literal
+            for easy identification.
+
+          '';
+
+        automatic-import =
+          # markdown
+          ''
+            ## Automatic import
+
+            Nix files (they're all flake-parts modules) are automatically imported.
+            Nix files prefixed with an underscore are ignored.
+            No literal path imports are used.
+            This means files can be moved around and nested in directories freely.
+
+            > [!NOTE]
+            > This pattern has been the inspiration of [an auto-imports library, import-tree](https://github.com/vic/import-tree).
+
+          '';
+      };
+
+      imports = [ (inputs.import-tree ./modules) ];
+
+      _module.args.rootPath = ./.;
+    };
 }
