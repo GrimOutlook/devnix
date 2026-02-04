@@ -13,7 +13,9 @@
     # Maximum number of lines held in window history.
     historyLimit = 10000;
     # Automatically spawn a session if trying to attach and none are running.
-    newSession = true;
+    # WARN: Don't turn this on. This appears to already be default behavior and when this is
+    # enabled it ends up spawning 2 sessions.
+    newSession = false;
     # Set the $TERM variable. Use tmux-direct if italics or 24bit true color support is needed.
     terminal = "tmux-direct";
     # Additional contents of /etc/tmux.conf, to be run before sourcing plugins.
