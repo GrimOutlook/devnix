@@ -20,6 +20,9 @@
     # agenix
     agenix.url = "github:ryantm/agenix";
     agenix.inputs.nixpkgs.follows = "nixpkgs";
+
+    # nixvim
+    nixvim.url = "github:nix-community/nixvim";
   };
 
   outputs = {
@@ -28,6 +31,7 @@
     home-manager,
     nixos-wsl,
     agenix,
+    nixvim,
     ...
   } @ inputs: let
     # Supported systems for your flake packages, shell, etc.

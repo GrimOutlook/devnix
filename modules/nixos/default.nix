@@ -1,6 +1,7 @@
 # Add your reusable NixOS modules to this directory, on their own file (https://nixos.wiki/wiki/Module).
 # These should be stuff you would like to share with others, not your personal configurations.
 {
-  packages = import ./packages/default.nix;
   github_secrets = import ./github_secrets.nix;
+  nixvim = import ./nixvim/default.nix;
+  packages = import ./packages/default.nix;
 }

@@ -6,18 +6,25 @@
   config,
   pkgs,
   ...
-}: {
+}:
+
+{
   # You can import other NixOS modules here
   imports = [
-    # If you want to use modules your own flake exports (from modules/nixos):
-    inputs.self.nixosModules.packages
-    inputs.self.nixosModules.github_secrets
+    # Include the agenix module for secrets management
+    inputs.agenix.nixosModules.default
 
     # Include the WSL module
     inputs.nixos-wsl.nixosModules.default
 
-    # Include the agenix module for secrets management
-    inputs.agenix.nixosModules.default
+    # If you want to use modules your own flake exports (from modules/nixos):
+    inputs.self.nixosModules.packages
+
+    # Install the SSH keys needed to push to github
+    inputs.self.nixosModules.github_secrets
+
+    # Include the nixvim configurations
+    inputs.self.nixosModules.nixvim
 
     # You can also split up your configuration and import pieces of it here:
     # ./users.nix
