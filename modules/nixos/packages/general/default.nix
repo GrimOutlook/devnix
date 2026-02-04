@@ -2,17 +2,18 @@
 
 {
   imports = [
+    ./bash/default.nix
+    ./bat/default.nix
     ./blesh/default.nix
     ./eza/default.nix
     ./neovim.nix
     ./starship.nix
     ./tmux/default.nix
+    ./zoxide/default.nix
   ];
 
   environment.systemPackages = with pkgs; [
     age # Modern encryption tool with small explicit keys
-    bash # GNU Bourne-Again Shell, the de facto standard shell on Linux (for interactive use)
-    bat # Cat(1) clone with syntax highlighting and Git integration
     bingrep # Greps through binaries from various OSs and architectures, and colors them
     broot # Interactive tree view, a fuzzy search, a balanced BFS descent and customizable commands
     btop # Monitor of resources
@@ -66,23 +67,18 @@
     watchexec # Executes commands in response to file modifications
     wikiman # Offline search engine for manual pages, Arch Wiki, Gentoo Wiki and other documentation
     xcp # Extended cp(1)
-    zoxide # Fast cd command that learns your habits
   ];
   
   environment.shellAliases = {
-    cat = "bat";
     cp = "xcp";
     docker = "podman";
     log = "lnav";
     mkdir = "mkdir -p";
   };
-  
-  programs.bash.completion.enable = true;
 
   programs.gnupg.agent = {
     enable = true;
     pinentryPackage = pkgs.pinentry-tty;
   };
 
-  programs.zoxide.enable = true;
 }

@@ -32,5 +32,19 @@
     extraConfig = builtins.readFile ./tmux.conf;
   };
 
-  environment.shellInit = builtins.readFile ./config.sh + builtins.readFile ./theme.sh;
+  environment.shellInit = builtins.readFile ./config.sh + builtins.readFile ./theme.sh + ''
+    # Verify that:
+    # 1. TMUX command exists
+    # 2. PS1 string is set and isn't ""
+    # 3. We aren't in a screen session
+    # 4. We aren't in a TMUX session already
+    # 5. Additional check to make sure we aren't in a tmux session
+    if command -v tmux &>/dev/null \
+      && [ -n "$PS1" ] \
+      && [[ ! "$TERM" =~ screen ]] \
+      && [[ ! "$TERM" =~ tmux ]] \
+      && [ -z "$TMUX" ]; then
+      tmux new-session
+    fi
+  '';
 }
