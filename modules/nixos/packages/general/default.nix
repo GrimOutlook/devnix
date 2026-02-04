@@ -2,6 +2,7 @@
 
 {
   imports = [
+    ./blesh/default.nix
     ./eza/default.nix
     ./neovim.nix
     ./starship.nix
@@ -76,10 +77,7 @@
     mkdir = "mkdir -p";
   };
   
-  programs.bash = {
-    blesh.enable = true;
-    completion.enable = true;
-  };
+  programs.bash.completion.enable = true;
 
   programs.gnupg.agent = {
     enable = true;
