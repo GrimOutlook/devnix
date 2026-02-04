@@ -23,8 +23,7 @@
         whitespace = "space-before-tab,trailing-space";
 
         logallrefupdates = true;
-        # TODO: Figure out how to add this back in
-        # excludesfile = ./gitignore;
+        excludesfile = builtins.path { path = ./gitignore; };
       };
 
       interactive = {
