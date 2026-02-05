@@ -3,6 +3,7 @@
     { pkgs, ... }:
     {
       home.packages = with pkgs; [
+        curlie # Frontend to curl that adds the ease of use of httpie, without compromising on features and performance
         dogdns # Command-line DNS client
         geoip # API for GeoIP/Geolocation databases
         gping # Ping, but with a graph
