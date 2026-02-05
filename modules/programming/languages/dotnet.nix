@@ -1,11 +1,25 @@
+{config, ...}:
 {
-  flake.modules.homeManager.base = 
+  flake.modules.nixos.base = 
     {pkgs, ...}:
     {
-      home.packages = with pkgs; [
+      environment.systemPackages = with pkgs; [
         dotnet-sdk
         dotnet-runtime
-        pkgs.dotnetPackages.Nuget
+        dotnetPackages.Nuget
       ];
+
+      programs.nixvim = {
+        lsp.servers = {
+          csharp_ls.enable = true;
+        };
+        plugins = {
+          treesitter = {
+            grammarPackages = with pkgs.vimPlugins.nvim-treesitter.builtGrammars; [
+              c_sharp
+            ];
+          };
+        };
+      };
     };
 }
