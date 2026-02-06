@@ -12,6 +12,12 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    
+    agenix-rekey = {
+      url = "github:oddlama/agenix-rekey";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     flake-parts = {
       url = "github:hercules-ci/flake-parts";
       inputs.nixpkgs-lib.follows = "nixpkgs";
@@ -77,9 +83,9 @@
   };
 
   outputs =
-    inputs:
+    { self, nixpkgs, ...}@inputs:
     inputs.flake-parts.lib.mkFlake { inherit inputs; } {
-      imports = [ (inputs.import-tree ./modules) ];
+      imports = [ (inputs.import-tree ./features) ];
 
       _module.args.rootPath = ./.;
     };

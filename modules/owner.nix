@@ -1,12 +1,6 @@
 { config, ... }:
 {
   flake = {
-    meta.owner = {
-      email = "dev@grimoutlook.dev";
-      name = "Dominic Grimaldi";
-      username = "grimoutlook";
-    };
-
     modules = {
       nixos.base = {
         users.users.${config.flake.meta.owner.username} = {
