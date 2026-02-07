@@ -1,10 +1,4 @@
 {
-  nixConfig = {
-    abort-on-warn = true;
-    extra-experimental-features = [ "pipe-operators" ];
-    allow-import-from-derivation = false;
-  };
-
   inputs = {
     
     agenix = {
@@ -15,6 +9,11 @@
     
     agenix-rekey = {
       url = "github:oddlama/agenix-rekey";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    devshell = {
+      url = "github:numtide/devshell";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -36,7 +35,6 @@
       url = "github:nix-community/home-manager/release-25.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
 
     import-tree.url = "github:vic/import-tree";
 
@@ -75,18 +73,20 @@
       flake = false;
       url = "github:tonymajestro/smart-scrolloff.nvim";
     };
+
+    treefmt-nix = {
+      url = "github:numtide/treefmt-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
+  # TODO: Check if this is actually needed.
   # _additional_ `inputs` only for deduplication
   inputs = {
     dedupe_flake-compat.url = "github:edolstra/flake-compat";
   };
 
   outputs =
-    { self, nixpkgs, ...}@inputs:
-    inputs.flake-parts.lib.mkFlake { inherit inputs; } {
-      imports = [ (inputs.import-tree ./features) ];
-
-      _module.args.rootPath = ./.;
-    };
+    { flake-parts, ... }@inputs:
+    flake-parts.lib.mkFlake { inherit inputs; } (inputs.import-tree ./modules);
 }
