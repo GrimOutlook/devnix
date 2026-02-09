@@ -3,6 +3,8 @@
     { pkgs, ... }:
     {
       environment.systemPackages = with pkgs; [
+			  age
+
         # Utils
         dua
         fd

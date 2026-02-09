@@ -35,9 +35,5 @@ in
         };
       };
 
-      age.secrets.agenix-home-secret-key = {
-        rekeyFile = ./agenix-home-secret-key.age;
-        owner = username;
-      };
     };
 }

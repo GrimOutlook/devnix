@@ -10,8 +10,8 @@
 
       age.rekey = {
         storageMode = "local";
-        masterIdentities = [ ../../../.secrets/identity.age ];
-        localStorageDir = ../../../.secrets/home/${configName};
+        masterIdentities = [ ../../../secrets/master-key.age ];
+        localStorageDir = ../../../secrets/home/${configName};
       };
     };
 }
