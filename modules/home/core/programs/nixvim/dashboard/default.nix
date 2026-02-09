@@ -1,6 +1,6 @@
 { inputs, lib, config, ... }:
 {
-  flake.modules.nixos.base.programs.nixvim = 
+  flake.modules.homeManager.core.programs.nixvim = 
     {pkgs, ...}:
     {
       dependencies = {
