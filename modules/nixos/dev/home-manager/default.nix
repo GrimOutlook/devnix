@@ -21,10 +21,10 @@ in
           topLevel.config.flake.modules.homeManager.core
           (topLevel.config.flake.modules.homeManager."host_${hostName}" or { })
           {
-            age = {
-              identityPaths = [ config.age.secrets.agenix-home-secret-key.path ];
-              rekey.hostPubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBE+2at1NN5ahYloIOYXyEhGi6lRN4PoapQz6CNoTo0r";
-            };
+            # age = {
+            #   identityPaths = [ config.age.secrets.agenix-home-secret-key.path ];
+            #   rekey.hostPubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBE+2at1NN5ahYloIOYXyEhGi6lRN4PoapQz6CNoTo0r";
+            # };
           }
         ];
 

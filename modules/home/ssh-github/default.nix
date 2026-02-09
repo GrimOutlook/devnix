@@ -5,7 +5,6 @@
     {
       services.ssh-agent.enable = true;
       programs.ssh.matchBlocks."github.com".identityFile = config.age.secrets.ssh-github.path;
-
-      age.secrets.ssh-github.rekeyFile = ./ssh-github.age;
+			age.secrets.ssh-github.rekeyFile = ./github.com.age;
     };
 }

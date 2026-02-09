@@ -3,12 +3,9 @@
   homeHosts.horizon = {
 	  unstable = true;
 	  
-	  modules = [
-		  {
-        imports = with config.flake.modules.homeManager; [
-          desktop
-        ];
-			}
+	  modules = with config.flake.modules.homeManager; [
+      desktop
+      ssh-github
 	  ];
   };
 }
