@@ -1,5 +1,6 @@
+{config, ...}:
 {
-  flake.modules.homeManager.core = {
+  flake.modules.homeManager.dev = {
     home = {
       sessionVariables.NIXPKGS_ALLOW_UNFREE = 1;
     };

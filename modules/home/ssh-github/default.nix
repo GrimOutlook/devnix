@@ -4,11 +4,10 @@
     { config, ... }:
     {
       services.ssh-agent.enable = true;
-      programs.ssh.matchBlocks."gitlab.avmc.army.mil".identityFile = config.age.secrets.gitlab-key.path;
-      age.secrets.gitlab-key = {
-        file = ../../../secrets/ssh/gitlab.avmc.army.mil.age;
+      programs.ssh.matchBlocks."github.com".identityFile = config.age.secrets.github-key.path;
+      age.secrets.github-key = {
+        file = ../../../secrets/ssh/github.com.age;
         mode = "0600";
-        owner = "root";
       };
     };
 }

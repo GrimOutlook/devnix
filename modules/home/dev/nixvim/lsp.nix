@@ -1,5 +1,6 @@
+{config, ...}:
 {
-  flake.modules.homeManager.core.programs.nixvim = 
+  flake.modules.homeManager.dev.programs.nixvim = 
     {pkgs, ...}:
     {
       plugins.snacks = {

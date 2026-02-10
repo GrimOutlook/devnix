@@ -1,6 +1,6 @@
-{ inputs, ... }:
+{config, inputs, ...}:
 {
-  flake.modules.homeManager.core = {
+  flake.modules.homeManager.dev = {
     imports = [
       inputs.nixvim.homeModules.nixvim
     ];
