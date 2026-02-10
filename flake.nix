@@ -52,10 +52,6 @@
 
     nixvim = {
       url = "github:nix-community/nixvim/nixos-25.11";
-      inputs = {
-        flake-parts.follows = "flake-parts";
-        nixpkgs.follows = "nixpkgs";
-      };
     };
 
     # Jump to next/previous LSP reference in the current buffer for the item

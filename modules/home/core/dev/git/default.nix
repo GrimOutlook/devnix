@@ -9,11 +9,6 @@
             email = "dev@grimoutlook.dev";
             name = "Dominic Grimaldi";
           };
-
-          core.editor = "nvim";
-          github.user = "GrimOutlook";
-          mergetool.prompt = false;
-          pull.rebase = false;
         };
       };
 
@@ -49,17 +44,10 @@
     };
 
     home.shellAliases = {
-      lg = "lazygit";
-
-      gs = "git switch";
-      gsc = "git switch -c";
-      gfu = "git fetch upstream";
-      gfo = "git fetch origin";
-      gpc = "gh pr checkout";
-    };
-
-    programs.fish.shellAbbrs = {
-      B = "git checkout master || git checkout main && git pull && git checkout -b";
+      push = "git push";
+      pull = "git pull";
+      add = "git add -Av";
+      status = "git status";
     };
   };
 }

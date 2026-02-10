@@ -3,7 +3,8 @@
     { pkgs, ... }:
     {
       environment.systemPackages = with pkgs; [
-			  age
+        age
+        wget
 
         # Utils
         dua

@@ -6,8 +6,7 @@
     modules = [
       ./_nixos
     ]
-		++ (with config.flake.modules.nixos; [
-      desktop
+    ++ (with config.flake.modules.nixos; [
       dev
       wsl
     ]);

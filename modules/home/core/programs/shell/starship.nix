@@ -1,7 +1,7 @@
 
 { config, ... }:
 {
-  flake.modules.homeManager.base =
+  flake.modules.homeManager.core =
     { pkgs, ... }:
     {
       programs.starship = {

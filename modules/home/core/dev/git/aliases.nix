@@ -1,9 +1,9 @@
 {
-  flake.modules.nixos.base =
+  flake.modules.homeManager.core =
     {pkgs, ...}: 
     {
       programs.git = {
-        config = {
+        settings = {
           alias = {
             ### Human Git
             untracked = "ls-files -o";

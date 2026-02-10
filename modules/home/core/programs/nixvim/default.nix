@@ -15,8 +15,6 @@
       enable = true;
       defaultEditor = true;
 
-      nixpkgs.useGlobalPackages = true;
-
       viAlias = true;
       vimAlias = true;
 
@@ -70,15 +68,12 @@
         nvim-bqf.enable = true;
         nvim-lightbulb.enable = true;
         nvim-ufo.enable = true;
-        oil.enable = true;
-        oil-git-status.enable = true;
         overseer.enable = true;
         package-info.enable = true;
         project-nvim.enable = true;
         refactoring.enable = true;
         render-markdown.enable = true;
         sleuth.enable = true;
-        snacks.enable = true;
         spider.enable = true;
         tiny-inline-diagnostic.enable = true;
         tmux-navigator.enable = true;
