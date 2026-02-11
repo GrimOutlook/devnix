@@ -93,6 +93,89 @@
         web-devicons.enable = true;
         which-key.enable = true;
       };
+
+      keymaps = [
+        {
+          mode = "n";
+          key = "<leader>w";
+          action = "<cmd>write<cr>";
+          options = {
+            desc = "Save";
+          };
+        }
+        {
+          mode = "n";
+          key = "<leader>W";
+          action = "<cmd>writeall<cr>";
+          options = {
+            desc = "Save All";
+          };
+        }
+        {
+          mode = "n";
+          key = "<leader>q";
+          action = "<cmd>lua Snacks.bufdelete()<cr>";
+          options = {
+            desc = "Close Buffer";
+          };
+        }
+        {
+          mode = "n";
+          key = "<leader>Q";
+          action = "<cmd>quitall<cr>";
+          options = {
+            desc = "Quit Nvim";
+          };
+        }
+
+        # Clear search highlighting with escape
+        {
+          mode = "n";
+          key = "<ESC>";
+          action = "<cmd>nohlsearch<cr>";
+          options = {
+            desc = "Clear Search Highlighting";
+          };
+        }
+
+        # Make normal j and k presses work with wrapped words
+        {
+          mode = ["n" "x"];
+          key = "j";
+          action = "v:count == 0 ? 'gj' : 'j'";
+          options = {
+            desc = "Down";
+            expr = true;
+          };
+        }
+        {
+          mode = ["n" "x"];
+          key = "<Down>";
+          action = "v:count == 0 ? 'gj' : 'j'";
+          options = {
+            desc = "Down";
+            expr = true;
+          };
+        }
+        {
+          mode = ["n" "x"];
+          key = "k";
+          action = "v:count == 0 ? 'gk' : 'k'";
+          options = {
+            desc = "Up";
+            expr = true;
+          };
+        }
+        {
+          mode = ["n" "x"];
+          key = "<Up>";
+          action = "v:count == 0 ? 'gk' : 'k'";
+          options = {
+            desc = "Up";
+            expr = true;
+          };
+        }
+      ];
     };
   };
 }

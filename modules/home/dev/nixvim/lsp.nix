@@ -49,6 +49,30 @@
             desc = "Goto T[y]pe Definitions";
           };
         }
+        {
+          mode = "n";
+          key = "D";
+          action = "<cmd>lua vim.diagnostic.open_float()<cr>";
+          options = {
+            desc = "Show Diagnostic";
+          };
+        }
+        {
+          mode = "n";
+          key = "<leader>x";
+          action = "<cmd>lua require(\"snacks\").picker.diagnostics_buffer()<cr>";
+          options = {
+            desc = "Buffer Diagnostics";
+          };
+        }
+        {
+          mode = "n";
+          key = "<leader>X";
+          action = "<cmd>lua require(\"snacks\").picker.diagnostics()<cr>";
+          options = {
+            desc = "Diagnostics";
+          };
+        }
       ];
     };
 }

@@ -1,3 +1,8 @@
+# nix-config
+
+The structure of this configuration is based off of [this](https://github.com/GaetanLepage/nix-config)
+repo.
+
 ## Installation
 
 ```bash
@@ -9,8 +14,6 @@ nix run nixpkgs#git -- clone https://github.com/GrimOutlook/devnix /etc/nixos
 ```
 
 ## Resources
-- [Really good dendritic layout](https://github.com/drupol/infra/tree/master)
-- [Another good dendritic layout](https://github.com/GaetanLepage/nix-config)
-- [Configure Neovim using Nix the right way](https://github.com/nix-community/nixvim)
-- [Wombat's Book of Nix](https://mhwombat.codeberg.page/nix-book/)
-
+- [NixOS Packages/Options](https://search.nixos.org/packages?channel=25.11)
+- [HomeManager Options](https://home-manager-options.extranix.com/)
+- [NixVim Options](https://nix-community.github.io/nixvim/25.11/index.html)

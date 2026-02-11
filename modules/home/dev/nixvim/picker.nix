@@ -1,4 +1,3 @@
-{config, ...}:
 {
   flake.modules.homeManager.dev.programs.nixvim = 
     {pkgs, ...}:
@@ -12,7 +11,7 @@
         {
           mode = "n";
           key = "<leader>b";
-          action = "<cmd>lua Snacks.picker.buffers()<cr>";
+          action = "<cmd>lua Snacks.picker.buffers({current = false})<cr>";
           options = {
             desc = "Find buffers";
           };
@@ -28,7 +27,7 @@
         {
           mode = "n";
           key = "<leader>ff";
-          action = "<cmd>lua Snacks.picker.files()<cr>";
+          action = "<cmd>lua Snacks.picker.files({current = false})<cr>";
           options = {
             desc = "Files";
           };
