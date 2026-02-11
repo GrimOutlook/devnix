@@ -1,4 +1,4 @@
-{config, ...}:
+{lib, ...}:
 {
   flake.modules.homeManager.dev =
     {
@@ -12,6 +12,7 @@
           dotnet-sdk_9
           dotnet-runtime_9
           dotnetPackages.Nuget
+          csharpier
         ];
       };
 
@@ -19,6 +20,13 @@
         nixvim = {
           lsp.servers = {
             csharp_ls.enable = true;
+          };
+          plugins.conform-nvim = {
+            settings = {
+              formatters_by_ft = {
+                cs = [ "csharpier" ];
+              };
+            };
           };
         };
       };
