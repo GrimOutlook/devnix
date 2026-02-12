@@ -17,3 +17,7 @@ nix run nixpkgs#git -- clone https://github.com/GrimOutlook/devnix /etc/nixos
 - [NixOS Packages/Options](https://search.nixos.org/packages?channel=25.11)
 - [HomeManager Options](https://home-manager-options.extranix.com/)
 - [NixVim Options](https://nix-community.github.io/nixvim/25.11/index.html)
+
+## TODO
+
+- [ ] Add service to mount all windows drives for WSL module.

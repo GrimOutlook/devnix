@@ -69,6 +69,7 @@
         nvim-ufo.enable = true;
         overseer.enable = true;
         package-info.enable = true;
+        persistence.enable = true;
         project-nvim.enable = true;
         refactoring.enable = true;
         render-markdown.enable = true;
