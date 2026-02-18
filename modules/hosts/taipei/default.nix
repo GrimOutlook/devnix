@@ -1,6 +1,6 @@
 { config, ... }:
 {
-  nixosHosts.horizon = {
+  nixosHosts.taipei = {
     unstable = true;
 
     modules = [

@@ -3,7 +3,7 @@ let
   keys = "~/.ssh/keys";
 in
 {
-  homeHosts.horizon = {
+  homeHosts.taipei = {
     unstable = true;
     modules = with config.flake.modules.homeManager; [
       dev
