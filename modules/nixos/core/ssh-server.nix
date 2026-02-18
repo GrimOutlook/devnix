@@ -3,6 +3,7 @@
     services.openssh = {
       enable = true;
 
+      # Don't allow PasswordAuthentication to SSH hosts EVER.
       settings.PasswordAuthentication = false;
     };
 
