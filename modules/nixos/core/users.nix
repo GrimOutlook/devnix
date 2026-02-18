@@ -18,7 +18,8 @@ in
 
           group = "${username}";
 
-          initialPassword = "";
+          initialHashedPassword = 
+            "$y$j9T$B1twhXiwjRRijxI5.sKdD.$ezIbul2rpq59cT/zHUDgeVygGVXcq01LDiyb4GFc79/";
           
           extraGroups = [
             # Enable ‘sudo’ for the user.
@@ -27,6 +28,7 @@ in
         };
       };
       groups."${username}" = {};
+      groups.sudo = {};
     };
     nix.settings.trusted-users = [ "${username}" ];
   };
