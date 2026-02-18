@@ -17,7 +17,7 @@ in
           };
           Washington = {
             hostname = "washington.home.arpa";
-            user = "root";
+            user = "grim";
             identityFile = "${keys}/washington";
           };
         };
