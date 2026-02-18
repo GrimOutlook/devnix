@@ -1,9 +1,9 @@
 # Hosts
 
-| Hostname | Type |
-| --- | --- |
-| `horizon` | WSL |
-| `washington` | Server VM |
+| Hostname | Type | Description |
+| --- | --- | --- |
+| `horizon` | WSL | Development WSL Host |
+| `washington` | Server VM | Main Service Hosting VM |
 
 ## Installation
 
