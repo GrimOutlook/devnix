@@ -1,18 +1,13 @@
 {
   flake.modules.nixos.security = {
-
-    # environment.shellAliases.sudo = "doas";
-
     security = {
-      # TODO: revert to original command when https://github.com/NixOS/nix/issues/10202 is fixed
-      # sudo.enable = false;
-      sudo = {
+      sudo-rs = {
         enable = true;
-        wheelNeedsPassword = false;
-      };
-      doas = {
-        enable = false;
-        wheelNeedsPassword = false;
+        extraRules = [
+          # Allow execution of any command by all users in group sudo,
+          # requiring a password.
+          { groups = [ "sudo" ]; commands = [ "ALL" ]; }
+        ];
       };
     };
   };
