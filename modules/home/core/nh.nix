@@ -1,4 +1,4 @@
-{inputs, ...}:
+{host-info, ...}:
 {
   flake.modules.homeManager.nh =
     { nhSwitchCommand, ... }:
@@ -11,7 +11,7 @@
       programs.nh = {
         enable = true;
 
-        flake = inputs.flake-source or "";
+        flake = host-info.flake or "";
 
         clean = {
           enable = true;
