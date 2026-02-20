@@ -20,13 +20,22 @@
       };
 
       programs = {
-        bacon.enable = true;
-
         nixvim = {
-          lsp.servers.rust_analyzer = {
+          plugins.rustaceanvim = {
             enable = true;
-            config.settings = {
-              cargo.features = "all";
+            settings.server = {
+              default_settings = {
+                rust-analyzer = {
+                  check = {
+                    command = "clippy";
+                  };
+                  inlayHints = {
+                    lifetimeElisionHints = {
+                      enable = "always";
+                    };
+                  };
+                };
+              };
             };
           };
         };
