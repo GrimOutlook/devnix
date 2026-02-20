@@ -3,6 +3,7 @@
     { config, pkgs, ... }:
     {
       home.packages = with pkgs; [
+        claude-code # Agentic coding tool that lives in your terminal, understands your codebase, and helps you code faster
         cmake # Cross-platform, open-source build system generator
         dos2unix # Convert text files with DOS or Mac line breaks to Unix line breaks and vice versa
         just # Handy way to save and run project-specific commands

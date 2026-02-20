@@ -2,149 +2,145 @@
   inputs,
   lib,
   config,
-  self,
   ...
-}@flakeArgs:
+}:
 let
   inherit (lib) types mkOption;
-in
-{
-  options =
+
+  # Capture nix-config's inputs and modules for use in exported module
+  nixConfigInputs = inputs;
+  nixConfigModules = config.flake.modules;
+
+  mkHostsModule =
+    ncInputs: ncModules:
+    { lib, config, ... }:
     let
+      inherit (lib) types mkOption;
+
       baseHostModule =
-        { config, name, ... }:
+        { config, ... }:
         {
           options = {
-            system = mkOption {
+            arch = mkOption {
               type = types.str;
               default = "x86_64-linux";
+              description = "The system architecture (e.g., x86_64-linux, aarch64-linux)";
             };
 
-            unstable = lib.mkOption {
+            unstable = mkOption {
               type = types.bool;
+              default = false;
             };
 
-            modules = lib.mkOption {
+            modules = mkOption {
               type = with types; listOf deferredModule;
               default = [ ];
             };
 
-            nixpkgs = lib.mkOption {
+            nixpkgs = mkOption {
               type = types.pathInStore;
             };
-            pkgs = lib.mkOption {
+
+            pkgs = mkOption {
               type = types.pkgs;
             };
-
-            # Contains the final package for this configuration
-            package = lib.mkOption {
-              type = types.package;
-            };
           };
+
           config = {
-            nixpkgs = if config.unstable then inputs.nixpkgs else inputs.nixpkgs-stable;
+            nixpkgs = if config.unstable then ncInputs.nixpkgs-unstable else ncInputs.nixpkgs;
             pkgs = import config.nixpkgs {
-              inherit (config) system;
+              system = config.arch;
               config.allowUnfree = true;
             };
           };
         };
 
-      hostTypeNixos = types.submodule [
-        baseHostModule
-        (
-          { name, ... }:
-          {
-            modules = [
-              config.flake.modules.nixos.core
-              { networking.hostName = name; }
-              (config.flake.modules.nixos."host_${name}" or { })
-            ];
-            package = self.nixosConfigurations.${name}.config.system.build.toplevel;
-          }
-        )
-      ];
-      hostTypeHomeManager = types.submodule [
-        baseHostModule
-        (
-          { name, ... }:
-          {
-            modules = [
-              config.flake.modules.homeManager.core
-              (
-                { pkgs, config, ... }:
-                {
-                  nix.package = pkgs.nix;
-                  age.identityPaths = [ "${config.home.homeDirectory}/.ssh/agenix" ];
-                }
-              )
-            ];
-            package = self.homeConfigurations.${name}.activationPackage;
-          }
-        )
-      ];
+      # Freeform module that captures all non-option attributes as passthru config
+      freeformHostModule = {
+        freeformType = types.attrsOf types.anything;
+      };
+
+      nixosHostType = types.submodule [ baseHostModule freeformHostModule ];
+      homeHostType = types.submodule [ baseHostModule freeformHostModule ];
+
+      hostType = types.submodule {
+        options = {
+          nixos = mkOption {
+            type = types.nullOr nixosHostType;
+            default = null;
+          };
+          home = mkOption {
+            type = types.nullOr homeHostType;
+            default = null;
+          };
+        };
+      };
+    in
+    let
+      # Options managed by the hosts module itself (not passed through to NixOS/home-manager)
+      hostModuleOptions = [ "arch" "unstable" "modules" "nixpkgs" "pkgs" ];
+
+      # Extract freeform config (everything except our managed options)
+      extractPassthruConfig = hostConfig:
+        lib.filterAttrs (name: _: !lib.elem name hostModuleOptions) hostConfig;
     in
     {
-      nixosHosts = mkOption { type = types.attrsOf hostTypeNixos; };
-      homeHosts = mkOption { type = types.attrsOf hostTypeHomeManager; };
-    };
-
-  config = {
-    flake = {
-      nixosConfigurations =
-        let
-          mkHost =
-            hostname: options:
-
-            options.nixpkgs.lib.nixosSystem {
-              inherit (options) system modules;
-              specialArgs.inputs = inputs;
-            };
-        in
-        lib.mapAttrs mkHost config.nixosHosts;
-
-      homeConfigurations =
-        let
-          mkHost =
-            configName: options:
-            inputs.home-manager.lib.homeManagerConfiguration {
-              extraSpecialArgs = {
-                inputs = inputs;
-                inherit configName;
-                nhSwitchCommand = "nh home switch --configuration ${configName}";
-              };
-              inherit (options) pkgs modules;
-            };
-        in
-        lib.mapAttrs mkHost config.homeHosts;
-    };
-
-    perSystem =
-      {
-        pkgs,
-        lib,
-        system,
-        ...
-      }:
-      {
-        checks =
-          let
-            filterSystem = lib.filterAttrs (n: cfg: cfg.system == system);
-
-            extractChecks =
-              name: configs:
-              pkgs.symlinkJoin {
-                name = "${name}-checks";
-                paths = lib.pipe configs [
-                  filterSystem
-                  (lib.mapAttrsToList (_: cfg: cfg.package))
-                ];
-              };
-          in
-          lib.mapAttrs extractChecks {
-            nixos-hosts = config.nixosHosts;
-            home-hosts = config.homeHosts;
-          };
+      options.host = mkOption {
+        type = types.attrsOf hostType;
+        default = { };
       };
-  };
+
+      config.flake = {
+        nixosConfigurations = lib.mapAttrs (
+          hostname: hostConfig:
+          let
+            passthruConfig = extractPassthruConfig hostConfig.nixos;
+          in
+          hostConfig.nixos.nixpkgs.lib.nixosSystem {
+            system = hostConfig.nixos.arch;
+            modules =
+              [
+                ncModules.nixos.core
+                { networking.hostName = hostname; }
+                passthruConfig
+              ]
+              ++ hostConfig.nixos.modules;
+            specialArgs.inputs = ncInputs;
+          }
+        ) (lib.filterAttrs (_: v: v.nixos != null) config.host);
+
+        homeConfigurations = lib.mapAttrs (
+          configName: hostConfig:
+          let
+            passthruConfig = extractPassthruConfig hostConfig.home;
+          in
+          ncInputs.home-manager.lib.homeManagerConfiguration {
+            extraSpecialArgs = {
+              inputs = ncInputs;
+              inherit configName;
+              nhSwitchCommand = "nh home switch --configuration ${configName}";
+            };
+            inherit (hostConfig.home) pkgs;
+            modules =
+              [
+                ncModules.homeManager.core
+                (
+                  { pkgs, config, ... }:
+                  {
+                    nix.package = pkgs.nix;
+                    age.identityPaths = [ "${config.home.homeDirectory}/.ssh/agenix" ];
+                  }
+                )
+                passthruConfig
+              ]
+              ++ hostConfig.home.modules;
+          }
+        ) (lib.filterAttrs (_: v: v.home != null) config.host);
+      };
+    };
+in
+{
+  imports = [ (mkHostsModule nixConfigInputs nixConfigModules) ];
+
+  config.flake.modules.flake.hosts = mkHostsModule nixConfigInputs nixConfigModules;
 }
