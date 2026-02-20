@@ -137,6 +137,27 @@ let
               ++ hostConfig.home.modules;
           }
         ) (lib.filterAttrs (_: v: v.home != null) config.host);
+
+        # Generate checks for home configurations grouped by system architecture
+        checks =
+          let
+            homeHosts = lib.filterAttrs (_: v: v.home != null) config.host;
+            # Group hosts by their architecture
+            hostsByArch = lib.foldlAttrs (
+              acc: configName: hostConfig:
+              let
+                arch = hostConfig.home.arch;
+                homeConfig = config.flake.homeConfigurations.${configName};
+              in
+              acc
+              // {
+                ${arch} = (acc.${arch} or { }) // {
+                  "home-${configName}" = homeConfig.activationPackage;
+                };
+              }
+            ) { } homeHosts;
+          in
+          hostsByArch;
       };
     };
 in

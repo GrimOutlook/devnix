@@ -26,6 +26,7 @@ in
           inputs = inputs;
           configName = "nixos_${hostName}";
           nhSwitchCommand = "nh os switch";
+          nhFlake = topLevel.config.host-info.flake;
         };
       };
 
