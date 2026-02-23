@@ -65,6 +65,10 @@ let
 
       hostType = types.submodule {
         options = {
+          name = mkOption {
+            type = types.str;
+            description = "Configuration name (used as hostname for NixOS and config name for home-manager)";
+          };
           nixos = mkOption {
             type = types.nullOr nixosHostType;
             default = null;
@@ -78,7 +82,7 @@ let
     in
     let
       # Options managed by the hosts module itself (not passed through to NixOS/home-manager)
-      hostModuleOptions = [ "arch" "unstable" "modules" "nixpkgs" "pkgs" ];
+      hostModuleOptions = [ "name" "arch" "unstable" "modules" "nixpkgs" "pkgs" ];
 
       # Extract freeform config (everything except our managed options)
       extractPassthruConfig = hostConfig:
@@ -86,78 +90,63 @@ let
     in
     {
       options.host = mkOption {
-        type = types.attrsOf hostType;
-        default = { };
+        type = hostType;
       };
 
       config.flake = {
-        nixosConfigurations = lib.mapAttrs (
-          hostname: hostConfig:
-          let
-            passthruConfig = extractPassthruConfig hostConfig.nixos;
-          in
-          hostConfig.nixos.nixpkgs.lib.nixosSystem {
-            system = hostConfig.nixos.arch;
-            modules =
-              [
-                ncModules.nixos.core
-                { networking.hostName = hostname; }
-                passthruConfig
-              ]
-              ++ hostConfig.nixos.modules;
-            specialArgs.inputs = ncInputs;
-          }
-        ) (lib.filterAttrs (_: v: v.nixos != null) config.host);
-
-        homeConfigurations = lib.mapAttrs (
-          configName: hostConfig:
-          let
-            passthruConfig = extractPassthruConfig hostConfig.home;
-          in
-          ncInputs.home-manager.lib.homeManagerConfiguration {
-            extraSpecialArgs = {
-              inputs = ncInputs;
-              inherit configName;
-              nhSwitchCommand = "nh home switch --configuration ${configName}";
-              nhFlake = config.host-info.flake;
+        nixosConfigurations = lib.mkIf (config.host.nixos != null) {
+          ${config.host.name} =
+            let
+              passthruConfig = extractPassthruConfig config.host.nixos;
+            in
+            config.host.nixos.nixpkgs.lib.nixosSystem {
+              system = config.host.nixos.arch;
+              modules =
+                [
+                  ncModules.nixos.core
+                  { networking.hostName = config.host.name; }
+                  passthruConfig
+                ]
+                ++ config.host.nixos.modules;
+              specialArgs.inputs = ncInputs;
             };
-            inherit (hostConfig.home) pkgs;
-            modules =
-              [
-                ncModules.homeManager.core
-                (
-                  { pkgs, config, ... }:
-                  {
-                    nix.package = pkgs.nix;
-                    age.identityPaths = [ "${config.home.homeDirectory}/.ssh/agenix" ];
-                  }
-                )
-                passthruConfig
-              ]
-              ++ hostConfig.home.modules;
-          }
-        ) (lib.filterAttrs (_: v: v.home != null) config.host);
+        };
 
-        # Generate checks for home configurations grouped by system architecture
-        checks =
-          let
-            homeHosts = lib.filterAttrs (_: v: v.home != null) config.host;
-            # Group hosts by their architecture
-            hostsByArch = lib.foldlAttrs (
-              acc: configName: hostConfig:
-              let
-                arch = hostConfig.home.arch;
-                homeConfig = config.flake.homeConfigurations.${configName};
-              in
-              acc
-              // {
-                ${arch} = (acc.${arch} or { }) // {
-                  "home-${configName}" = homeConfig.activationPackage;
-                };
-              }
-            ) { } homeHosts;
-          in
-          hostsByArch;
+        homeConfigurations = lib.mkIf (config.host.home != null) {
+          ${config.host.name} =
+            let
+              passthruConfig = extractPassthruConfig config.host.home;
+              configName = config.host.name;
+            in
+            ncInputs.home-manager.lib.homeManagerConfiguration {
+              extraSpecialArgs = {
+                inputs = ncInputs;
+                inherit configName;
+                nhSwitchCommand = "nh home switch --configuration ${configName}";
+                nhFlake = config.host-info.flake;
+              };
+              inherit (config.host.home) pkgs;
+              modules =
+                [
+                  ncModules.homeManager.core
+                  (
+                    { pkgs, config, ... }:
+                    {
+                      nix.package = pkgs.nix;
+                      age.identityPaths = [ "${config.home.homeDirectory}/.ssh/agenix" ];
+                    }
+                  )
+                  passthruConfig
+                ]
+                ++ config.host.home.modules;
+            };
+        };
+
+        # Generate checks for home configuration
+        checks = lib.mkIf (config.host.home != null) {
+          ${config.host.home.arch}."home-${config.host.name}" =
+            config.flake.homeConfigurations.${config.host.name}.activationPackage;
+        };
       };
     };
 in

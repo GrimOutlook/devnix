@@ -21,6 +21,12 @@
         j="just";
       };
 
-      programs.bash.initExtra = ''eval "$(just --completions bash)"'';
+      programs.bash.initExtra = ''
+        eval "$(just --completions bash)"
+
+        # Use `just` bash-completion function (`_just`) for the alias
+        # we made for it (`j`).
+        complete -F _just j
+      '';
     };
 }
