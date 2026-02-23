@@ -1,4 +1,3 @@
-{config, ...}:
 {
   flake.modules.homeManager.dev =
     {
@@ -21,20 +20,27 @@
 
       programs = {
         nixvim = {
-          plugins.rustaceanvim = {
-            enable = true;
-            settings.server = {
-              default_settings = {
-                rust-analyzer = {
-                  check = {
-                    command = "clippy";
-                  };
-                  inlayHints = {
-                    lifetimeElisionHints = {
-                      enable = "always";
+          plugins = {
+            rustaceanvim = {
+              enable = true;
+              settings.server = {
+                default_settings = {
+                  rust-analyzer = {
+                    check = {
+                      command = "clippy";
+                    };
+                    inlayHints = {
+                      lifetimeElisionHints = {
+                        enable = "always";
+                      };
                     };
                   };
                 };
+              };
+            };
+            conform-nvim = {
+              settings.formatters_by_ft = {
+                "rust" = "rustfmt";
               };
             };
           };
