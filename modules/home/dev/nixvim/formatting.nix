@@ -5,8 +5,6 @@
       plugins.conform-nvim = {
         enable = true;
 
-        # TODO: Determine why the below block results in the build failing
-        #
         # Whether to enable automatic installation of formatters listed in
         # settings.formatters_by_ft and settings.formatters.
         autoInstall = {
