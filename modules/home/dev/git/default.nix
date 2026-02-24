@@ -56,6 +56,7 @@
         status = "git status";
 
         s = "git diff HEAD --stat";
+        st = "git status --short";
         aa = "git add-all";
         send = "git send";
         sp = "git send-please";

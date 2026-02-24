@@ -15,27 +15,7 @@
       ########
       # Misc #
       ########
-      s = "ssh";
-      ka = "killall";
-      cal = "cal -m";
-      da = "doas";
-      jb = "jobs";
-      py = "python";
       t = "date +'%a %b %e %R:%S %Z %Y'";
-      x = "xdg-open";
-
-      ##############
-      # Networking #
-      ##############
-      pg = "ping gnu.org";
-
-      # Wifi
-      wu = "nmcli radio wifi on";
-      wd = "nmcli radio wifi off";
-
-      # VPN
-      wgu = "sudo systemctl start wg-quick-wg0";
-      wgd = "sudo systemctl stop wg-quick-wg0";
 
       #######
       # Nix #
