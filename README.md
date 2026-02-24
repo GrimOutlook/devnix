@@ -3,15 +3,16 @@
 The structure of this configuration is based off of [this](https://github.com/GaetanLepage/nix-config)
 repo.
 
-## Installation
+## Nix Hosts
 
-```bash
-rm -rf /etc/nixos
-# You will only need this If you are on a corporate VPN that requires it.
-# export NIX_SSL_CERT_FILE='/my/certifiacate/file'
-export NIX_CONFIG='experimental-features = nix-command flakes'
-nix run nixpkgs#git -- clone https://github.com/GrimOutlook/devnix /etc/nixos
-```
+| Host | Summary |
+| --- | --- |
+| [belfast](https://github.com/GrimOutlook/nix-host-belfast) | Desktop |
+| [london](https://github.com/GrimOutlook/nix-host-london) | Media |
+| [newyork](https://github.com/GrimOutlook/nix-host-newyork) | Software Switch |
+| [pyongyang](https://github.com/GrimOutlook/nix-host-pyongyang) | Security System |
+| [taipei](https://github.com/GrimOutlook/nix-host-taipei) | Laptop WSL |
+| [washington](https://github.com/GrimOutlook/nix-host-washington) | Web Service Host |
 
 ## Resources
 - [NixOS Packages/Options](https://search.nixos.org/packages?channel=25.11)

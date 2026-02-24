@@ -4,6 +4,7 @@
     inputs.disko.nixosModules.disko
 
     agenix
+    home-manager
     nix
     security
     ssh-server
