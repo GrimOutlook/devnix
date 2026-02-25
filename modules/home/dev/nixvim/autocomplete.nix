@@ -34,8 +34,8 @@
                 "lsp"
                 "path"
                 "snippets"
-                "nerdfont"
-                "emoji"
+                # "nerdfont"
+                # "emoji"
               ];
 
               providers = {
