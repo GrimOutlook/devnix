@@ -59,10 +59,8 @@
     # Seamless integration of git hooks with Nix
     # git-hooks = {
     #   url = "github:cachix/git-hooks.nix";
-    #   inputs = {
-    #     flake-compat.follows = "dedupe_flake-compat";
-    #     nixpkgs.follows = "nixpkgs";
-    #   };
+    #   inputs.nixpkgs.follows = "nixpkgs";
+    #
     # };
   };
 
@@ -94,12 +92,6 @@
     #   flake = false;
     #   url = "github:mawkler/refjump.nvim";
     # };
-  };
-
-  # TODO: Check if this is actually needed.
-  # _additional_ `inputs` only for deduplication
-  inputs = {
-    dedupe_flake-compat.url = "github:edolstra/flake-compat";
   };
 
   outputs =

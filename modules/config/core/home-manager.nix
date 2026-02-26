@@ -25,7 +25,7 @@ in
 
           extraSpecialArgs = {
             inputs = inputs;
-            configName = "nixos_${hostName}";
+            configName = topLevel.config.host-info.name;
             nhSwitchCommand = "nh os switch";
             nhFlake = topLevel.config.host-info.flake;
           };
@@ -36,7 +36,7 @@ in
       { lib, pkgs, ... }:
       {
         home = {
-          username = "${username}";
+          username = username;
           homeDirectory = lib.mkForce "/${if pkgs.stdenv.isLinux then "home" else "Users"}/${username}";
           stateVersion = "25.11";
         };
