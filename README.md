@@ -18,6 +18,7 @@ repo.
 - [NixOS Packages/Options](https://search.nixos.org/packages?channel=25.11)
 - [HomeManager Options](https://home-manager-options.extranix.com/)
 - [NixVim Options](https://nix-community.github.io/nixvim/25.11/index.html)
+- [NixOS Virtual Machines](https://nix.dev/tutorials/nixos/nixos-configuration-on-vm)
 
 ## TODO
 
