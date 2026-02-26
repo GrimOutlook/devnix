@@ -3,6 +3,7 @@
   flake.modules.homeManager.dev.programs.nixvim =
     { pkgs, ... }:
     let
+      mkRaw = inputs.nixvim.lib.nixvim.mkRaw;
       plenary = pkgs.vimUtils.buildVimPlugin {
         pname = "plenary-nvim";
         version = "unstable";
@@ -60,7 +61,9 @@
       '';
       keymaps = [
         {
-          action = ''<cmd>lua require("tiny-code-action").code_action()<cr>'';
+          action = mkRaw ''
+            require("tiny-code-action").code_action
+          '';
           key = "<leader>a";
           options = {
             desc = "Code Action";
