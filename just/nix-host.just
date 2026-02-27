@@ -16,8 +16,8 @@ home *args:
 
 # Reconfigure system to new nixosConfiguration
 [group('switch')]
-os:
-  nh os switch . -H {{hostname}}
+os *args:
+  nh os switch . -H {{hostname}} {{args}}
 
 # Update flake.nix inputs
 [group('update')]
@@ -44,14 +44,15 @@ switch-local PATH=nix-config-local:
 # Deploy this host flake to a remote system
 [group('deploy')]
 deploy HOST=DEFAULT_HOST:
-  nix run github:nix-community/nixos-anywhere -- --flake .#{{hostname}} {{HOST}} 
-  just clear-ssh
+  just os --target-host {{HOST}}
+  just connect
 
 # Deploy this host flake to a remote system for the first time
 [group('deploy')]
 deploy-new:
   just deploy "nixos@{{hostname}}"
   just clear-ssh
+  just connect
 
 # Connect to nix-host
 [group('connect')]
