@@ -54,6 +54,21 @@ deploy-new:
   just clear-ssh
   just connect
 
+# Deploy this host flake to a remote system
+[group('deploy')]
+[group('local')]
+deploy-from-local HOST=DEFAULT_HOST PATH=nix-config-local:
+  just os --target-host {{HOST}} --override-input nix-config path:{{PATH}}
+  just connect
+
+# Deploy this host flake to a remote system for the first time
+[group('deploy')]
+[group('local')]
+deploy-new-from-local PATH=nix-config-local:
+  just deploy-from-local "nixos@{{hostname}}" {{PATH}}
+  just clear-ssh
+  just connect
+
 # Connect to nix-host
 [group('connect')]
 connect HOST=DEFAULT_HOST:
