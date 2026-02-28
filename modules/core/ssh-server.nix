@@ -12,11 +12,16 @@
 
     users.users =
       let
-        key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBshpqm8SogcHSuol7cFNLi9R+WJR8XoWXpM6gmxLWb1 grim@taipei";
+        taipei = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBshpqm8SogcHSuol7cFNLi9R+WJR8XoWXpM6gmxLWb1 grim@taipei";
+        belfast = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKhvuDzeDBK94c5jtkKLtunFNBbiIXDfwb06PrrjDMQb grim@belfast";
+        keys = [
+          taipei
+          belfast
+        ];
       in
       {
-        root.openssh.authorizedKeys.keys = [ key ];
-        grim.openssh.authorizedKeys.keys = [ key ];
+        root.openssh.authorizedKeys.keys = keys;
+        grim.openssh.authorizedKeys.keys = keys;
       };
   };
 }
