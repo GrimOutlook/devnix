@@ -17,22 +17,6 @@ let
     let
       inherit (lib) types mkOption;
 
-      # Homelab options type for passing domains and ports
-      homelabType = types.submodule {
-        options = {
-          domains = mkOption {
-            type = types.attrsOf types.str;
-            default = { };
-            description = "Domain configurations from homelab (e.g., { grimaldifamily = \"grimaldifamily.org\"; })";
-          };
-          ports = mkOption {
-            type = types.unspecified;
-            default = _: null;
-            description = "Port function from homelab that maps service names to port numbers";
-          };
-        };
-      };
-
       baseHostModule =
         { config, ... }:
         {
@@ -120,11 +104,6 @@ let
             If a module exists in either, it is automatically included in that configuration.
           '';
         };
-        homelab = mkOption {
-          type = homelabType;
-          default = { };
-          description = "Homelab configuration (domains and ports) passed from parent flake";
-        };
         nixos = mkOption {
           type = types.nullOr nixosHostType;
           default = null;
@@ -152,10 +131,7 @@ let
               ]
               ++ resolvedNixosModules
               ++ config.nixos.modules;
-              specialArgs = {
-                inputs = ncInputs;
-                inherit (config.homelab) domains ports;
-              };
+              specialArgs.inputs = ncInputs;
             };
         };
 
@@ -171,7 +147,6 @@ let
               extraSpecialArgs = {
                 inputs = ncInputs;
                 inherit configName;
-                inherit (config.homelab) domains ports;
                 nhSwitchCommand = "nh home switch --configuration ${configName}";
                 nhFlake = config.host-info.flake;
               };
